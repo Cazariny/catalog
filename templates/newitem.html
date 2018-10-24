@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Catalog land</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Catalog Land</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<h1>New Menu Item</h1>
+
+<div class = 'pane'>
+    <form action="{{ url_for('newMenuItem', restaurant_id=restaurant_id )}}" method = 'post'>
+
+        <dl>
+            <dt>Name:</dt>
+            <dd><input type ='text' size='30' name='name'></dd>
+            <dt>Description:</dt>
+            <dd><input type="text" size="30" name="Description"></dd>
+            <dt>Category:</dt>
+            <dd><<input list="Categories" name="Categories"> </dd>
+            <datalist id="Categories">
+                <option value="Soccer">
+                <option value="Basketball">
+                <option value="Baseball">
+                <option value="Frisbee">
+                <option value="Snowboarding">
+                <option value="Rock Climbing">
+                <option value="Foosball">
+                <option value="Skating">
+                <option value="Hockey">
+            </datalist>
+        </dl>
+
+
+        <input type='submit' value='Create'>
+
+    </form>
+</div>
+
+</body>
+
+
+
+
+</html>
