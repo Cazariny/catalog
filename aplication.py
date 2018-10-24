@@ -249,8 +249,8 @@ def principal():
 
 
 # Create a new menu item
-@app.route('/restaurant/<int:categories_id>/menu/new/', methods=['GET', 'POST'])
-def newMenuItem(categories_id):
+@app.route('/catalog/<categories_name>/new/', methods=['GET', 'POST'])
+def newMenuItem(categories_name):
     if 'username' not in login_session:
         return redirect('/login')
     categories = session.query(Categories).filter_by(id=categories_id).one()
@@ -268,8 +268,8 @@ def newMenuItem(categories_id):
 # Edit a menu item
 
 
-@app.route('/restaurant/<int:categories_id>/menu/<int:items_id>/edit', methods=['GET', 'POST'])
-def editMenuItem(categories_id, items_id):
+@app.route('/catalog/<string:items_name>/edit', methods=['GET', 'POST'])
+def editMenuItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(Items).filter_by(id=items_id).one()
@@ -290,8 +290,8 @@ def editMenuItem(categories_id, items_id):
 
 
 # Delete a menu item
-@app.route('/restaurant/<int:categories_id>/menu/<int:items.id>/delete', methods=['GET', 'POST'])
-def deleteMenuItem(categories_id, items_id):
+@app.route('/catalog/<items_name>/delete', methods=['GET', 'POST'])
+def deleteMenuItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
     categories = session.query(Categories).filter_by(id=categories_id).one()

@@ -39,7 +39,6 @@ def itemMenu(categories_name):
     categories= session.query(Categories)
 
 
-
 # Create a new menu item
 @app.route('/restaurant/<int:categories_id>/menu/new/', methods=['GET', 'POST'])
 def newItem(categories_id):
