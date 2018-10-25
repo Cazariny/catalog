@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Categories, Items, User
+from models import Base, Categories, Items, User
 from flask import session as login_session
 import random
 import string
@@ -263,7 +263,7 @@ def newMenuItem(categories_name):
             flash('New Menu %s Item Successfully Created' % (newItem.name))
             return redirect(url_for('showMenu', categories_id=categories_id))
     else:
-        return render_template('newmenuitem.html', categories_id=categories_id)
+        return render_template('newitem.html', categories_id=categories_id)
 
 # Edit a menu item
 
@@ -286,7 +286,7 @@ def editMenuItem(items_name):
         flash('Menu Item Successfully Edited')
         return redirect(url_for('showMenu', categories_id=categories_id))
     else:
-        return render_template('editmenuitem.html', categories_id=categories_id, items=items_id, item=editedItem)
+        return render_template('editFile.html', categories_id=categories_id, items=items_id, item=editedItem)
 
 
 # Delete a menu item
@@ -304,7 +304,7 @@ def deleteMenuItem(items_name):
         flash('Menu Item Successfully Deleted')
         return redirect(url_for('showMenu', categories_id=categories_id))
     else:
-        return render_template('deleteMenuItem.html', item=itemToDelete)
+        return render_template('deleteFile.html', item=itemToDelete)
 
 
 
