@@ -302,9 +302,14 @@ def newMenuItem(categories_name):
 
 
 @app.route('/catalog/<categories_name>/<items_name>')
-def itemInfo(categorie_name, items_name):
-    categorie = session.query(Categories).filter_by(name=categorie_name)
-    
+def itemInfo(categories_name, items_name, categories_id):
+    category = session.query(Categories).filter_by(id = categories_id, name= categories_name)
+    creator = getUserInfo(category.user_id)
+    Item= session.query(Items)
+    category.name = categories_name
+    Item.name=items_name
+
+
 
 
 @app.route('/catalog/<string:items_name>/edit', methods=['GET', 'POST'])
