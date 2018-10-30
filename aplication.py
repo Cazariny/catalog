@@ -292,22 +292,24 @@ def newMenuItem(categories_name):
     if login_session['user_id'] != categories.user_id:
         return "<script>function myFunction() {alert('You are not authorized to add menu items to this restaurant. Please create your own restaurant in order to add items.');}</script><body onload='myFunction()'>"
         if request.method == 'POST':
-            newItem = Items(name=request.form['name'], description=request.form['description'], categories_id=categories_id, user_id=categories.user_id)
+            newItem = Items(name=request.form['name'], description=request.form['description'], categories_name=categories_name, user_id=categories.user_id)
             session.add(newItem)
             session.commit()
             flash('New Menu %s Item Successfully Created' % (newItem.name))
-            return redirect(url_for('showMenu', categories_id=categories_id))
+            return redirect(url_for('showMenu', categories_name=categories_name))
     else:
-        return render_template('newitem.html', categories_id=categories_id)
+        return render_template('newitem.html', categories_name=categories_name)
 
 
 @app.route('/catalog/<categories_name>/<items_name>')
-def itemInfo(categories_name, items_name, categories_id):
-    category = session.query(Categories).filter_by(id = categories_id, name= categories_name)
+def itemInfo(categories_name, items_name):
+    category = session.query(Categories).filter_by(name= categories_name).one()
     creator = getUserInfo(category.user_id)
-    Item= session.query(Items)
-    category.name = categories_name
-    Item.name=items_name
+    item= session.query(Items).filter_by(item_name = items_name).one()
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+        return render_template('itemInfo.html', item=item.name, category=category.name, creator=creator)
+    else:
+        return render_template('itemChanges.html',  item=item.name, category=category.name, creator=creator)
 
 
 
@@ -316,9 +318,9 @@ def itemInfo(categories_name, items_name, categories_id):
 def editMenuItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(Items).filter_by(id=items_id).one()
-    categories = session.query(Categories).filter_by(id=categories_id).one()
-    if login_session['user_id'] != categories.user_id:
+    editedItem = session.query(Items).filter_by(itname=items_name).one()
+    # categories = session.query(Categories).filter_by(catname=categories_name).one()
+    if login_session['user_id'] != items.user_id:
         return "<script>function myFunction() {alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
@@ -328,9 +330,9 @@ def editMenuItem(items_name):
         session.add(editedItem)
         session.commit()
         flash('Menu Item Successfully Edited')
-        return redirect(url_for('showMenu', categories_id=categories_id))
+        return redirect(url_for('principal'))
     else:
-        return render_template('editFile.html', categories_id=categories_id, items=items_id, item=editedItem)
+        return render_template('editFile.html', itname=items_name, item=editedItem)
 
 
 # Delete a menu item
@@ -338,15 +340,15 @@ def editMenuItem(items_name):
 def deleteMenuItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    categories = session.query(Categories).filter_by(id=categories_id).one()
-    itemToDelete = session.query(Items).filter_by(id=items_id).one()
+    categories = session.query(Categories).filter_by(id=categories_name).one()
+    itemToDelete = session.query(Items).filter_by(id=items_name).one()
     if login_session['user_id'] != categories.user_id:
         return "<script>function myFunction() {alert('You are not authorized to delete menu items to this restaurant. Please create your own restaurant in order to delete items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
         flash('Menu Item Successfully Deleted')
-        return redirect(url_for('showMenu', categories_id=categories_id))
+        return redirect(url_for('principal'))
     else:
         return render_template('deleteFile.html', item=itemToDelete)
 
