@@ -210,47 +210,46 @@ def gconnect():
     print "done!"
     return output
 
-    def createUser(login_session):
-        newUser = User(name=login_session['username'], email=login_session[
-            'email'], picture=login_session['picture'])
-        session.add(newUser)
-        session.commit()
-        user = session.query(User).filter_by(email=login_session['email']).one()
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session['email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
         return user.id
-
-    def getUserInfo(user_id):
-        user = session.query(User).filter_by(id=user_id).one()
-        return user
-
-    def getUserID(email):
-        try:
-            user = session.query(User).filter_by(email=email).one()
-            return user.id
-        except:
-            return None
+    except:
+        return None
 
     # DISCONNECT - Revoke a current user's token and reset their login_session
 
-    @app.route('/gdisconnect')
-    def gdisconnect():
-        # Only disconnect a connected user.
-        access_token = login_session.get('access_token')
-        if access_token is None:
-            response = make_response(
-                json.dumps('Current user not connected.'), 401)
-            response.headers['Content-Type'] = 'application/json'
-            return response
-        url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-        h = httplib2.Http()
-        result = h.request(url, 'GET')[0]
-        if result['status'] == '200':
-            response = make_response(json.dumps('Successfully disconnected.'), 200)
-            response.headers['Content-Type'] = 'application/json'
-            return response
-        else:
-            response = make_response(json.dumps('Failed to revoke token for given user.', 400))
-            response.headers['Content-Type'] = 'application/json'
-            return response
+@app.route('/gdisconnect')
+def gdisconnect():
+    # Only disconnect a connected user.
+    access_token = login_session.get('access_token')
+    if access_token is None:
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    if result['status'] == '200':
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 
 @app.route('/catalog.JSON')
@@ -278,12 +277,12 @@ def newMenuItem(categories_name):
     categories = session.query(Categories).filter_by(name=categories_name).one()
     if login_session['user_id'] != categories.user_id:
         return "<script>function myFunction() {alert('You are not authorized to add menu items to this restaurant. Please create your own restaurant in order to add items.');}</script><body onload='myFunction()'>"
-        if request.method == 'POST':
-            newItem = Items(name=request.form['name'], description=request.form['description'], categories_name=categories_name, user_id=categories.user_id)
-            session.add(newItem)
-            session.commit()
-            flash('New Menu %s Item Successfully Created' % (newItem.name))
-            return redirect(url_for('showMenu', categories_name=categories_name))
+    if request.method == 'POST':
+        newItem = Items(name=request.form['name'], description=request.form['description'], categories_name=categories_name, user_id=categories.user_id)
+        session.add(newItem)
+        session.commit()
+        flash('New Menu %s Item Successfully Created' % (newItem.name))
+        return redirect(url_for('showMenu', categories_name=categories_name))
     else:
         return render_template('newitem.html', categories_name=categories_name)
 
