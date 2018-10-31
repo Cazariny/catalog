@@ -11,6 +11,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
+from flask_httpauth import HTTPBasicAuth
 
 
 auth = HTTPBasicAuth()
