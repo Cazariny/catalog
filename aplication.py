@@ -12,20 +12,22 @@ import json
 from flask import make_response
 import requests
 
-
-
-engine = create_engine('sqlite:///catalog.db')
-
-
-Base.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
 app = Flask(__name__)
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
+APPLICATION_NAME = "Restaurant Menu Application"
 
 
+# Connect to Database and create database session
+engine = create_engine('sqlite:///catalog.db')
+Base.metadata.bind = engine
+
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
+
+
+# Create anti-forgery state token
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -143,6 +145,7 @@ def gconnect():
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
+    # Submit request, parse response - Python3 compatible
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
@@ -163,7 +166,6 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -206,19 +208,24 @@ def gconnect():
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
     return output
 
+# User Helper Functions
+
+
 def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session['email'], picture=login_session['picture'])
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
     session.add(newUser)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
 
+
 def getUserInfo(user_id):
     user = session.query(User).filter_by(id=user_id).one()
     return user
+
 
 def getUserID(email):
     try:
@@ -227,7 +234,8 @@ def getUserID(email):
     except:
         return None
 
-    # DISCONNECT - Revoke a current user's token and reset their login_session
+# DISCONNECT - Revoke a current user's token and reset their login_session
+
 
 @app.route('/gdisconnect')
 def gdisconnect():
@@ -242,6 +250,13 @@ def gdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
+        # Reset the user's sesson.
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -301,6 +316,8 @@ def itemInfo(categories_name, items_name):
 
 @app.route('/catalog/<items_name>/edit', methods=['GET', 'POST'])
 def editItem(items_name):
+    if 'username' not in login_session:
+        return redirect('/login')
     editedItem = session.query(Items).filter_by(name=items_name).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -316,18 +333,19 @@ def editItem(items_name):
 # Delete a menu item
 @app.route('/catalog/<items_name>/delete', methods=['GET', 'POST'])
 def deleteItem(items_name):
+    if 'username' not in login_session:
+        return redirect('/login')
     itemToDelete= session.query(Items).filter_by(name=items_name).one()
     if request.method == 'POST':
         session.delete(itemToDelete)
-        flash('%s Successfully Deleted' % itemToDelete.name)
         session.commit()
         return redirect(url_for('principal'))
+        flash('Item Successfully Deleted')
     else:
-        return render_template('deleteRestaurant.html', item=itemToDelete)
-
+        return render_template('deleteMenuItem.html', item=itemToDelete)
 
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=5000)
