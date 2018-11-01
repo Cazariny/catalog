@@ -1,21 +1,18 @@
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from sqlalchemy import create_engine, asc
+from sqlalchemy.orm import sessionmaker
 from models import Base, Categories, Items, User
-from flask import Flask, jsonify, request, url_for, abort, g, render_template
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy import create_engine
-
-from flask_httpauth import HTTPBasicAuth
-import json
-
-#NEW IMPORTS
+from flask import session as login_session
+import random
+import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
+import json
 from flask import make_response
 import requests
 
 
-auth = HTTPBasicAuth()
 
 engine = create_engine('sqlite:///catalog.db')
 
@@ -27,30 +24,6 @@ app = Flask(__name__)
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-
-
-@app.route('/users', methods = ['POST'])
-def new_user():
-    username = request.json.get('username')
-    password = request.json.get('password')
-    if username is None or password is None:
-        abort(400) # missing arguments
-    if session.query(User).filter_by(username = username).first() is not None:
-        abort(400) # existing user
-    user = User(username = username)
-    user.hash_password(password)
-    session.add(user)
-    session.commit()
-    return jsonify({ 'username': user.username }), 201, {'Location': url_for('get_user', id = user.id, _external = True)}
-
-
-@app.route('/api/users/<int:id>')
-def get_user(id):
-    user = session.query(User).filter_by(id=id).one()
-    if not user:
-        abort(400)
-    return jsonify({'username': user.username})
-
 
 
 @app.route('/login')
