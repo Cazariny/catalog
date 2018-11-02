@@ -9,22 +9,21 @@
     <title>Login</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Catalog Land</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Catalog Land</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="login.html">Login <span class="sr-only">(current)</span></a>
-            </ul>
-        </div>
-    </nav>
-    <!-- GOOGLE PLUS SIGN IN-->
-        <div id="signinButton">
-            <span class="g-signin"
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="login.html">Login <span class="sr-only">(current)</span></a>
+        </ul>
+    </div>
+</nav>
+    <div id="signinButton">
+          <span class="g-signin"
                 data-scope="openid email"
                 data-clientid="900234952643-va0na2ga3p7b0qivtjeaqkijcpnv9to5.apps.googleusercontent.com"
                 data-redirecturi="postmessage"
@@ -32,10 +31,9 @@
                 data-cookiepolicy="single_host_origin"
                 data-callback="signInCallback"
                 data-approvalprompt="force">
-            </span>
-        </div>
-
-        <div id="result"></div>
+          </span>
+    </div>
+    <div id="result"></div>
     <script>
         function signInCallback(authResult) {
             if (authResult['code']) {
@@ -53,34 +51,34 @@
                         if (result) {
                             $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
                             setTimeout(function() {
-                                window.location.href = "/home";
-                                }, 4000);
+                                window.location.href = "/restaurant";
+                            }, 4000);
+
                         } else if (authResult['error']) {
                             console.log('There was an error: ' + authResult['error']);
                         } else {
                             $('#result').html('Failed to make a server-side call. Check your configuration and console.');
                         }
                     }
-                }
-                );
+
+                });
             }
         }
     </script>
 
-    <!--END GOOGLE PLUS SIGN IN -->
-
-    <!--FACEBOOK SIGN IN -->
     <script>
         window.fbAsyncInit = function() {
             FB.init({
-                appId      : 'PASTE_YOUR_APP_ID_HERE',
-                cookie     : true,  // enable cookies to allow the server to access
-                // the session
-                xfbml      : true,  // parse social plugins on this page
-                version    : 'v2.8' // use version 2.8
-                });
+                appId      : '555525184872731',
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v2.2'
+            });
+
+            FB.AppEvents.logPageView();
+
         };
-        // Load the SDK asynchronously
+
         (function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
@@ -107,26 +105,30 @@
                         if (result) {
                             $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
                             setTimeout(function() {
-                                window.location.href = "/home";
-                                }, 4000);
+                                window.location.href = "/restaurant";
+                            }, 4000);
+
                         } else {
                             $('#result').html('Failed to make a server-side call. Check your configuration and console.');
                         }
                     }
+
                 });
             });
         }
     </script>
 
+
     <button>
+
 
         <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
             <a href='javascript:sendTokenToServer()'>Login with Facebook</a>
 
         </fb:login-button>
+
+
     </button>
-    <!--END FACEBOOK SIGN IN -->
 
 </body>
-
 </html>

@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
-from passlib.apps import custom_app_context as pwd_context
 import random, string
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
@@ -41,7 +40,7 @@ class Categories(Base):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'id': self.id,
             'name': self.name,
@@ -62,7 +61,7 @@ class Items(Base):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'name': self.name,
             'description': self.description,

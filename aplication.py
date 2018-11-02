@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-APPLICATION_NAME = "Restaurant Menu Application"
+APPLICATION_NAME = "CatalogLand"
 
 
 # Connect to Database and create database session
@@ -266,21 +266,21 @@ def gdisconnect():
         return response
 
 
-@app.route('/catalog.JSON')
-def catalogJSON():
-    catalog = session.query(Categories).all()
-    return jsonify(catalog=[c.serialize for c in catalog])
+# @app.route('/catalog.JSON')
+# def catalogJSON():
+#     catalog = session.query(Categories).all()
+#     return jsonify(catalog=[c.serialize for c in catalog])
 
 
 @app.route('/')
+@app.route('/home')
 def principal():
     categories = session.query(Categories)
-    creator = getUserInfo(categories.user_id)
-    items = session.query(Items).order_by(desc(Items.name))
-    if 'username' not in login_session or creator.id != login_session['user_id']:
-        return render_template('publicmenu.html', items=items, categories=categories, creator=creator)
+    items = session.query(Items).order_by(asc(Items.name))
+    if 'username' not in login_session:
+        return render_template('publicmenu.html', items=items, categories=categories)
     else:
-        return render_template('menu.html', items=items, categories=categories, creator=creator)
+         return render_template('menu.html', items=items, categories=categories)
 
 
 # Create a new menu item
@@ -304,9 +304,8 @@ def newMenuItem(categories_name):
 @app.route('/catalog/<categories_name>/<items_name>')
 def itemInfo(categories_name, items_name):
     category = session.query(Categories).filter_by(name= categories_name).one()
-    creator = getUserInfo(category.user_id)
     item= session.query(Items).filter_by(item_name = items_name).one()
-    if 'username' not in login_session or creator.id != login_session['user_id']:
+    if 'username' not in login_session:
         return render_template('itemInfo.html', item=item.name, category=category.name, creator=creator)
     else:
         return render_template('itemChanges.html',  item=item.name, category=category.name, creator=creator)
@@ -324,10 +323,9 @@ def editItem(items_name):
             editedItem.name = request.form['name']
         if request.form['description']:
             editedItem.description = request.form['description']
-        if request.form['price']:
-            return redirect(url_for('itemInfo'))
+        return redirect(url_for('itemInfo'))
     else:
-        return render_template('editRestaurant.html', item=editedItem)
+        return render_template('editFile.html', item=editedItem)
 
 
 # Delete a menu item
@@ -342,7 +340,7 @@ def deleteItem(items_name):
         return redirect(url_for('principal'))
         flash('Item Successfully Deleted')
     else:
-        return render_template('deleteMenuItem.html', item=itemToDelete)
+        return render_template('deleteFile.html', item=itemToDelete)
 
 
 if __name__ == '__main__':
