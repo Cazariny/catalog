@@ -3,8 +3,7 @@ from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from models import Base, Categories, Items, User
 from flask import session as login_session
-import random
-import string
+import random, string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
