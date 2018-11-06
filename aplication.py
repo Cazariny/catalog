@@ -222,9 +222,9 @@ def itemInfo(categories_name, items_name):
     category = session.query(Categories).filter_by(name= categories_name).one()
     item= session.query(Items).filter_by(item_name = items_name).one()
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item=item.name, category=category.name, creator=creator)
+        return render_template('itemInfo.html', item=item.name, category=category.name)
     else:
-        return render_template('itemChanges.html',  item=item.name, category=category.name, creator=creator)
+        return render_template('itemChanges.html',  item=item.name, category=category.name)
 
 
 
