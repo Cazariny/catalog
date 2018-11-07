@@ -241,10 +241,10 @@ def itemInfo(categories_name, cat_id, items_name):
 
 
 @app.route('/catalog/<items_name>/edit', methods=['GET', 'POST'])
-def editItem(items_name):
+def editItem(item_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(Items).filter_by(name=items_name).one()
+    editedItem = session.query(Items).filter_by(name=item_name).one()
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -257,10 +257,10 @@ def editItem(items_name):
 
 # Delete a menu item
 @app.route('/catalog/<items_name>/delete', methods=['GET', 'POST'])
-def deleteItem(items_name):
+def deleteItem(item_name):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete= session.query(Items).filter_by(name=items_name).one()
+    itemToDelete= session.query(Items).filter_by(name=item_name).one()
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()

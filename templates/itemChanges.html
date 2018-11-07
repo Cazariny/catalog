@@ -24,7 +24,7 @@
 <div class="container">
     <div class="row">
         <div class="col col-lg-6" style="border: 1px solid  black ">
-            <a href = "{{url_for('Items',item_name = item.name)}}">Edit Item</a>
+            <p><a href = "{{url_for('editItem',item_name = item.name)}}">Edit Item</a> | <a href = "{{url_for('deleteItem',item_name = item.name)}}">Delete Item</a></p>
             <h2>{{category.name}}</h2>
             <div class = 'nameAndPrice'>
                 <p>{{item.description}}</p>
