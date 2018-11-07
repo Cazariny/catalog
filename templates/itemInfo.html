@@ -24,22 +24,10 @@
 <div class="container">
     <div class="row">
         <div class="col col-lg-6" style="border: 1px solid  black ">
-            <h2> Categories</h2>
-            {% for i in categories %}
-            <div class = 'Categories'>
-                <span class = 'name'><p><a href="{{url_for('items', categories=categories, items=items)}}">{{i.name}}</a></p></span>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="col col-lg-6" style="border: 1px solid  black ">
-            <a href = "{{url_for('newItem'categories_name = categories_name)}}">Create New Item</a>
-            <h2> Recent added Items</h2>
-            {% for i in items %}
+            <h2>{{category.name}}</h2>
             <div class = 'nameAndPrice'>
-                <span class = 'name'><p>{{i.name}}</p></span>
+                <p>{{item.description}}</p>
             </div>
-
-            {% endfor %}
         </div>
     </div>
 </div>

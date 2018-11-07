@@ -61,7 +61,6 @@ def gconnect():
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
-    # Submit request, parse response - Python3 compatible
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
@@ -82,6 +81,7 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
+        print "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -124,6 +124,7 @@ def gconnect():
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
+    print "done!"
     return output
 
 # User Helper Functions
@@ -166,12 +167,12 @@ def gdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
-        # Reset the user's sesson.
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
+    #     # Reset the user's sesson.
+    #     del login_session['access_token']
+    #     del login_session['gplus_id']
+    #     del login_session['username']
+    #     del login_session['email']
+    #     del login_session['picture']
 
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
@@ -182,10 +183,10 @@ def gdisconnect():
         return response
 
 
-# @app.route('/catalog.JSON')
-# def catalogJSON():
-#     catalog = session.query(Categories).all()
-#     return jsonify(catalog=[c.serialize for c in catalog])
+@app.route('/catalog.JSON')
+def catalogJSON():
+    catalog = session.query(Categories).all()
+    return jsonify(catalog=[c.serialize for c in catalog])
 
 
 @app.route('/')
@@ -216,15 +217,25 @@ def newMenuItem(categories_name):
     else:
         return render_template('newitem.html', categories_name=categories_name)
 
+@app.route("/catalog/<categories_name>/items/")
+def items(categories_name, cat_id):
+    categories= session.query(Categories).filter_by(id =cat_id).one()
+    items = session.query(Items).filter_by(categories_id = cat_id)
+    categories.name = categories_name
+    return render_template(
+        'Items.html', categories=categories, items=items)
+
 
 @app.route('/catalog/<categories_name>/<items_name>')
-def itemInfo(categories_name, items_name):
-    category = session.query(Categories).filter_by(name= categories_name).one()
-    item= session.query(Items).filter_by(item_name = items_name).one()
+def itemInfo(categories_name, cat_id, items_name):
+    category = session.query(Categories).filter_by(id= cat_id).one()
+    item= session.query(Items).filter_by(categories_id= cat_id).one()
+    category.name = categories_name
+    item.name = items_name
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item=item.name, category=category.name)
+        return render_template('itemInfo.html', item=item, categories=category)
     else:
-        return render_template('itemChanges.html',  item=item.name, category=category.name)
+        return render_template('itemChanges.html',  item=item, categories=category)
 
 
 
