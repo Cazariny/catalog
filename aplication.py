@@ -218,12 +218,11 @@ def newMenuItem(categories_name):
         return render_template('newitem.html', categories_name=categories_name)
 
 @app.route("/catalog/<categories_name>/items/")
-def items(categories_name, cat_id):
-    categories= session.query(Categories).filter_by(id =cat_id).one()
-    items = session.query(Items).filter_by(categories_id = cat_id)
-    categories.name = categories_name
+def items(categories_name, categories_id):
+    categories= session.query(Categories).filter_by(id = categories_id).one()
+    items = session.query(Items).filter_by(categories_id = categories_id)
     return render_template(
-        'Items.html', categories=categories, items=items)
+        'Items.html',items=items, categories=categories, categories_name=categories.name)
 
 
 @app.route('/catalog/<categories_name>/<items_name>')

@@ -32,7 +32,7 @@
             {% endfor %}
         </div>
         <div class="col col-lg-6" style="border: 1px solid  black ">
-            <a href = "{{url_for('newItem'categories_name = categories_name)}}">Create New Item</a>
+            <a href = "{{url_for('newItem'categories_name= categories.name)}}">Create New Item</a>
             <h2> Recent added Items</h2>
             {% for i in items %}
             <div class = 'nameAndPrice'>
