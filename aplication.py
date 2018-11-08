@@ -217,12 +217,12 @@ def newMenuItem(categories_name):
     else:
         return render_template('newitem.html', categories_name=categories_name)
 
-@app.route("/catalog/<categories_name>/items/")
-def items(categories_name, categories_id):
-    categories= session.query(Categories).filter_by(id = categories_id).one()
-    items = session.query(Items).filter_by(categories_id = categories_id)
-    return render_template(
-        'Items.html',items=items, categories=categories, categories_name=categories.name)
+@app.route("/catalog/<string:category_name>/items")
+def items(category_name, cat_id):
+    categories= session.query(Categories).filter_by(name = category_name, id = cat_id).one()
+    items = session.query(Items).filter_by(categories_id = cat_id)
+    print categories.name
+    return render_template('Items.html', categories= categories, items=items, cat_id=cat_id, category_name=category_name)
 
 
 @app.route('/catalog/<categories_name>/<items_name>')
