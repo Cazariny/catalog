@@ -225,15 +225,13 @@ def items(categories_name):
 
 
 @app.route('/catalog/<categories_name>/<items_name>')
-def itemInfo(categories_name, cat_id, items_name):
-    category = session.query(Categories).filter_by(id= cat_id).one()
-    item= session.query(Items).filter_by(categories_id= cat_id).one()
-    category.name = categories_name
-    item.name = items_name
+def itemInfo(categories_name, items_name):
+    categories = session.query(Categories).filter_by(name= categories_name).one()
+    item= session.query(Items).filter_by(name= items_name).one()
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item=item, categories=category)
+        return render_template('itemInfo.html', item=item, categories=categories, categories_name= categories.name, items_name= items.name)
     else:
-        return render_template('itemChanges.html',  item=item, categories=category)
+        return render_template('itemChanges.html',item=item, categories=categories, categories_name= categories.name, items_name= items.name)
 
 
 
