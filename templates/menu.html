@@ -27,12 +27,12 @@
             <h2> Categories</h2>
             {% for i in categories %}
             <div class = 'Categories'>
-                <span class = 'name'><p><a href="{{url_for('items')}}">{{i.name}}</a></p></span>
+                <span class = 'name'><p><a href="{{url_for('items',category=categories, items=items, category_name = i.name)}}">{{i.name}}</a></p></span>
             </div>
             {% endfor %}
         </div>
         <div class="col col-lg-6" style="border: 1px solid  black ">
-            <a href = "{{url_for('newItem'categories_name= categories.name)}}">Create New Item</a>
+            <a href = "{{url_for('newItem',categories_name= i.name)}}">Create New Item</a>
             <h2> Recent added Items</h2>
             {% for i in items %}
             <div class = 'nameAndPrice'>

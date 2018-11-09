@@ -202,7 +202,7 @@ def principal():
 
 # Create a new menu item
 @app.route('/catalog/<categories_name>/new/', methods=['GET', 'POST'])
-def newMenuItem(categories_name):
+def newItem(categories_name):
     if 'username' not in login_session:
         return redirect('/login')
     categories = session.query(Categories).filter_by(name=categories_name).one()
@@ -215,14 +215,13 @@ def newMenuItem(categories_name):
         flash('New Menu %s Item Successfully Created' % (newItem.name))
         return redirect(url_for('showMenu', categories_name=categories_name))
     else:
-        return render_template('newitem.html', categories_name=categories_name)
+        return render_template('newitem.html', categories_name=categories.name)
 
-@app.route("/catalog/<string:category_name>/items")
-def items(category_name, cat_id):
-    categories= session.query(Categories).filter_by(name = category_name, id = cat_id).one()
-    items = session.query(Items).filter_by(categories_id = cat_id)
-    print categories.name
-    return render_template('Items.html', categories= categories, items=items, cat_id=cat_id, category_name=category_name)
+@app.route("/catalog/<string:categories_name>/items")
+def items(categories_name):
+    categories= session.query(Categories).filter_by(name = categories_name).one()
+    items= session.query(Items).filter_by(categories_id=categories.id).all()
+    return render_template('items.html', categories=categories, items=items, categories_name = categories.name)
 
 
 @app.route('/catalog/<categories_name>/<items_name>')
