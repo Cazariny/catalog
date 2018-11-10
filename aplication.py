@@ -217,11 +217,12 @@ def newItem(categories_name):
     else:
         return render_template('newitem.html', categories_name=categories.name)
 
-@app.route("/catalog/<string:categories_name>/items")
-def items(categories_name):
-    categories= session.query(Categories).filter_by(name = categories_name).one()
-    items= session.query(Items).filter_by(categories_id=categories.id).all()
-    return render_template('items.html', categories=categories, items=items, categories_name = categories.name)
+@app.route("/catalog/<string:category_name>/items")
+def items(category_name):
+    categories = session.query(Categories).get(id)
+    category= session.query(Categories).filter_by(name = category_name)
+    items= session.query(Items).filter_by(categories_id = categories.id)
+    return render_template('items.html', categories=categories, items=items, categories_name = category.name)
 
 
 @app.route('/catalog/<categories_name>/<items_name>')
