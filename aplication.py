@@ -27,6 +27,13 @@ session = DBSession()
 
 
 # Create anti-forgery state token
+# @app.route('/logini')
+# def chowLogin():
+#     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+#                     for x in xrange(32))
+#     login_session['state'] = state
+#     return "The current session state is %s" % login_session['state']
+
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -81,7 +88,7 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
+
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -219,20 +226,21 @@ def newItem(categories_name):
 
 @app.route("/catalog/<string:category_name>/items")
 def items(category_name):
-    categories = session.query(Categories).get(id)
-    category= session.query(Categories).filter_by(name = category_name)
-    items= session.query(Items).filter_by(categories_id = categories.id)
-    return render_template('items.html', categories=categories, items=items, categories_name = category.name)
+    categories = session.query(Categories)
+    category= session.query(Categories).filter_by(name=category_name)
+    items= session.query(Items).filter_by(categories_id = Categories.id)
+    return render_template('items.html', categories=categories, items=items, categories_name = Categories.name)
 
 
 @app.route('/catalog/<categories_name>/<items_name>')
-def itemInfo(categories_name, items_name):
-    categories = session.query(Categories).filter_by(name= categories_name).one()
+def itemInfo(category_name, items_name):
+    categories = session.query(Categories)
+    category = session.query(Categories).filter_by(name= category_name).one()
     item= session.query(Items).filter_by(name= items_name).one()
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item=item, categories=categories, categories_name= categories.name, items_name= items.name)
+        return render_template('itemInfo.html', item=item, categories=categories, categories_name= Categories.name, items_name= Items.name)
     else:
-        return render_template('itemChanges.html',item=item, categories=categories, categories_name= categories.name, items_name= items.name)
+        return render_template('itemChanges.html',item=item, categories=categories, categories_name= Categories.name, items_name= Items.name)
 
 
 

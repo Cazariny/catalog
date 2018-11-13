@@ -29,11 +29,11 @@
     <div id="signinButton">
           <span class="g-signin"
             data-scope="openid email"
-            data-clientid="900234952643-va0na2ga3p7b0qivtjeaqkijcpnv9to5.apps.googleusercontent.coms"
+            data-clientid="900234952643-va0na2ga3p7b0qivtjeaqkijcpnv9to5.apps.googleusercontent.com"
             data-redirecturi="postmessage"
             data-accesstype="offline"
             data-cookiepolicy="single_host_origin"
-            data-callback="signInCallback"
+            data-callback="Callback"
             data-approvalprompt="force">
           </span>
         </div>
@@ -41,7 +41,7 @@
     <div id="result"></div>
 
     <script>
-        function signInCallback(authResult) {
+        function Callback(authResult) {
           if (authResult['code']) {
             // Hide the sign-in button now that the user is authorized
             $('#signinButton').attr('style', 'display: none');
