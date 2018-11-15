@@ -24,7 +24,7 @@
 <h1>New Menu Item</h1>
 
 <div class = 'pane'>
-    <form action="{{ url_for('newMenuItem', restaurant_id=restaurant_id )}}" method = 'post'>
+    <form action="{{ url_for('newItem', categories= category)}}" method = 'post'>
 
         <dl>
             <dt>Name:</dt>
@@ -32,17 +32,12 @@
             <dt>Description:</dt>
             <dd><input type="text" size="30" name="description"></dd>
             <dt>Category:</dt>
-            <dd><<input list="Categories" name="category"> </dd>
+            <dd><input list="Categories" name="category"> </dd>
             <datalist id="Categories">
-                <option value="Soccer">
-                <option value="Basketball">
-                <option value="Baseball">
-                <option value="Frisbee">
-                <option value="Snowboarding">
-                <option value="Rock Climbing">
-                <option value="Foosball">
-                <option value="Skating">
-                <option value="Hockey">
+                <h2> Categories</h2>
+                {% for i in categories %}
+                <option value={{i.name}}>
+                {% endfor %}
             </datalist>
         </dl>
 

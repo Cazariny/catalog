@@ -214,16 +214,19 @@ def newItem():
     if 'username' not in login_session:
         return redirect('/login')
     category = session.query(Categories)
-    if login_session['user_id'] != Categories.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to add menu items to this restaurant. Please create your own restaurant in order to add items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
-        newItem = Items(name=request.form['name'], description=request.form['description'], category=request.form['category'], user_id=Categories.user_id)
+        newItem = Items(name=request.form['name'],
+                        description=request.form['description'],
+                        if request.form['category'] == 'Soccer':
+                            categories_id = 1
+                        elif request.form['category == '])
+
         session.add(newItem)
         session.commit()
         flash('New Menu %s Item Successfully Created' % newItem.name)
         return redirect(url_for('principal'))
     else:
-        return render_template('newitem.html', categories_name=Categories.name)
+        return render_template('newitem.html', categories=category)
 
 @app.route("/catalog/<string:category_name>/items")
 def items(category_name):
