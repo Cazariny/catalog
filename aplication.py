@@ -209,15 +209,15 @@ def principal():
 
 
 # Create a new menu item
-@app.route('/catalog/<string:categories_name>/new/', methods=['GET', 'POST'])
-def newItem(categories_name):
+@app.route('/catalog/new/', methods=['GET', 'POST'])
+def newItem():
     if 'username' not in login_session:
         return redirect('/login')
-    categories = session.query(Categories).filter_by(name=categories_name)
-    if login_session['user_id'] != categories.user_id:
+    category = session.query(Categories)
+    if login_session['user_id'] != Categories.user_id:
         return "<script>function myFunction() {alert('You are not authorized to add menu items to this restaurant. Please create your own restaurant in order to add items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
-        newItem = Items(name=request.form['name'], description=request.form['description'], categories_name=categories.name, user_id=categories.user_id)
+        newItem = Items(name=request.form['name'], description=request.form['description'], category=request.form['category'], user_id=Categories.user_id)
         session.add(newItem)
         session.commit()
         flash('New Menu %s Item Successfully Created' % newItem.name)
