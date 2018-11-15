@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/aplication.py" line="162" />
+    <bookmark url="file://$PROJECT_DIR$/aplication.py" line="153" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20966d74-2940-47f9-8dfa-6015c40aed36" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplication.py" beforeDir="false" afterPath="$PROJECT_DIR$/aplication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_secrets.json" beforeDir="false" afterPath="$PROJECT_DIR$/client_secrets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -36,7 +36,7 @@
     <session id="2065875515">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="36" />
+          <entry key="project.closed" value="38" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="5" />
@@ -44,6 +44,7 @@
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.16" value="1" />
+          <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.23" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="2" />
@@ -51,12 +52,12 @@
           <entry key="project.open.time.7" value="7" />
           <entry key="project.open.time.71" value="1" />
           <entry key="project.open.time.9" value="3" />
-          <entry key="project.opened" value="31" />
+          <entry key="project.opened" value="32" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="html" value="40" />
+          <entry key="html" value="41" />
           <entry key="json" value="2" />
           <entry key="py" value="25" />
           <entry key="txt" value="3" />
@@ -64,7 +65,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="40" />
+          <entry key="HTML" value="41" />
           <entry key="JSON" value="2" />
           <entry key="PLAIN_TEXT" value="3" />
           <entry key="Python" value="25" />
@@ -72,16 +73,16 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="2111" />
-          <entry key="py" value="3386" />
+          <entry key="html" value="2113" />
+          <entry key="py" value="3392" />
           <entry key="txt" value="261" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="2111" />
+          <entry key="HTML" value="2113" />
           <entry key="PLAIN_TEXT" value="259" />
-          <entry key="Python" value="3388" />
+          <entry key="Python" value="3394" />
         </counts>
       </usages-collector>
     </session>
@@ -91,11 +92,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/aplication.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="156" column="19" lean-forward="true" selection-start-line="156" selection-start-column="19" selection-end-line="156" selection-end-column="19" />
+            <state relative-caret-position="587">
+              <caret line="114" column="35" lean-forward="true" selection-start-line="114" selection-start-column="35" selection-end-line="114" selection-end-column="35" />
               <folding>
-                <marker date="1542163488259" expanded="true" signature="8466:8724" ph="..." />
-                <marker date="1542163488259" expanded="true" signature="8721:8724" ph="..." />
+                <marker date="1542245368838" expanded="true" signature="8283:8541" ph="..." />
+                <marker date="1542245368838" expanded="true" signature="8538:8541" ph="..." />
               </folding>
             </state>
           </provider>
@@ -104,8 +105,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+            <state relative-caret-position="595">
+              <caret line="40" column="13" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -145,13 +146,13 @@
         <option value="$PROJECT_DIR$/templates/newitem.html" />
         <option value="$PROJECT_DIR$/templates/deleteFile.html" />
         <option value="$PROJECT_DIR$/templates/editFile.html" />
-        <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/templates/itemChanges.html" />
         <option value="$PROJECT_DIR$/select.py" />
         <option value="$PROJECT_DIR$/templates/Items.html" />
         <option value="$PROJECT_DIR$/templates/publicmenu.html" />
         <option value="$PROJECT_DIR$/templates/menu.html" />
         <option value="$PROJECT_DIR$/templates/itemInfo.html" />
+        <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/templates/login.html" />
         <option value="$PROJECT_DIR$/aplication.py" />
       </list>
@@ -164,8 +165,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-7" />
-    <option name="width" value="921" />
+    <option name="x" value="953" />
+    <option name="width" value="974" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -249,7 +250,7 @@
       <workItem from="1541725694097" duration="6028000" />
       <workItem from="1541814838449" duration="1283000" />
       <workItem from="1542071241777" duration="4495000" />
-      <workItem from="1542158931368" duration="989000" />
+      <workItem from="1542158931368" duration="1823000" />
     </task>
     <task id="LOCAL-00001" summary="Creation of 2 templates">
       <created>1540347697078</created>
@@ -419,17 +420,24 @@
       <option name="project" value="LOCAL" />
       <updated>1542082113861</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Changes in templates">
+      <created>1542168865461</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1542168865461</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39670000" />
+    <option name="totallyTimeSpent" value="40599000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="921" height="1047" extended-state="0" />
+    <frame x="953" y="0" width="974" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32158118" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32932165" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -622,28 +630,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-170">
-          <caret line="34" column="50" lean-forward="true" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+        <state relative-caret-position="595">
+          <caret line="40" column="13" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/aplication.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="156" column="19" lean-forward="true" selection-start-line="156" selection-start-column="19" selection-end-line="156" selection-end-column="19" />
+        <state relative-caret-position="587">
+          <caret line="114" column="35" lean-forward="true" selection-start-line="114" selection-start-column="35" selection-end-line="114" selection-end-column="35" />
           <folding>
-            <marker date="1542163488259" expanded="true" signature="8466:8724" ph="..." />
-            <marker date="1542163488259" expanded="true" signature="8721:8724" ph="..." />
+            <marker date="1542245368838" expanded="true" signature="8283:8541" ph="..." />
+            <marker date="1542245368838" expanded="true" signature="8538:8541" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="38" column="14" lean-forward="true" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
         </state>
       </provider>
     </entry>

@@ -92,16 +92,16 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    stored_credentials = login_session.get('credentials')
+    stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
-    if stored_credentials is not None and gplus_id == stored_gplus_id:
+    if stored_access_token is not None and gplus_id == stored_gplus_id:
         response = make_response(json.dumps('Current user is already connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
     # Store the access token in the session for later use.
-    login_session['access_token'] = credentials
+    login_session['access_token'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
     # Get user info
@@ -115,12 +115,6 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
-    # see if user exists, if it doesn't make a new one
-    user_id = getUserID(data["email"])
-    if not user_id:
-        user_id = createUser(login_session)
-    login_session['user_id'] = user_id
-
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -131,6 +125,8 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
+
+
 
 # User Helper Functions
 

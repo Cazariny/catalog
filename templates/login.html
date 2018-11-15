@@ -33,7 +33,7 @@
             data-redirecturi="postmessage"
             data-accesstype="offline"
             data-cookiepolicy="single_host_origin"
-            data-callback="Callback"
+            data-callback="signInCallback"
             data-approvalprompt="force">
           </span>
         </div>
@@ -41,7 +41,7 @@
     <div id="result"></div>
 
     <script>
-        function Callback(authResult) {
+        function signInCallback(authResult) {
           if (authResult['code']) {
             // Hide the sign-in button now that the user is authorized
             $('#signinButton').attr('style', 'display: none');
