@@ -68,6 +68,7 @@ def gconnect():
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
+    # Submit request, parse response - Python3 compatible
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
@@ -111,9 +112,15 @@ def gconnect():
 
     data = answer.json()
 
-    login_session['username'] = data['name']
-    login_session['picture'] = data['picture']
-    login_session['email'] = data['email']
+    login_session['username'] = data["name"]
+    login_session['picture'] = data["picture"]
+    login_session['email'] = data["email"]
+
+    # see if user exists, if it doesn't make a new one
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -126,9 +133,22 @@ def gconnect():
     print "done!"
     return output
 
-
-
 # User Helper Functions
+
+
+def createUser(login_session):
+    newUser = User(username=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
 
 def getUserID(email):
     try:
@@ -137,24 +157,12 @@ def getUserID(email):
     except:
         return None
 
-def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
-    return user
-
-def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session[
-                   'email'], picture=login_session['picture'])
-    session.add(newUser)
-    session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
-    return user.id
-
 # DISCONNECT - Revoke a current user's token and reset their login_session
 
 
 @app.route('/gdisconnect')
 def gdisconnect():
-    # Only disconnect a connected user.
+        # Only disconnect a connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
@@ -176,7 +184,9 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -199,21 +209,21 @@ def principal():
 
 
 # Create a new menu item
-@app.route('/catalog/<categories_name>/new/', methods=['GET', 'POST'])
+@app.route('/catalog/<string:categories_name>/new/', methods=['GET', 'POST'])
 def newItem(categories_name):
     if 'username' not in login_session:
         return redirect('/login')
-    categories = session.query(Categories).filter_by(name=categories_name).one()
+    categories = session.query(Categories).filter_by(name=categories_name)
     if login_session['user_id'] != categories.user_id:
         return "<script>function myFunction() {alert('You are not authorized to add menu items to this restaurant. Please create your own restaurant in order to add items.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
-        newItem = Items(name=request.form['name'], description=request.form['description'], categories_name=categories_name, user_id=categories.user_id)
+        newItem = Items(name=request.form['name'], description=request.form['description'], categories_name=categories.name, user_id=categories.user_id)
         session.add(newItem)
         session.commit()
-        flash('New Menu %s Item Successfully Created' % (newItem.name))
-        return redirect(url_for('showMenu', categories_name=categories_name))
+        flash('New Menu %s Item Successfully Created' % newItem.name)
+        return redirect(url_for('principal'))
     else:
-        return render_template('newitem.html', categories_name=categories.name)
+        return render_template('newitem.html', categories_name=Categories.name)
 
 @app.route("/catalog/<string:category_name>/items")
 def items(category_name):
@@ -223,7 +233,7 @@ def items(category_name):
     return render_template('items.html', categories=categories, items=items, categories_name = Categories.name)
 
 
-@app.route('/catalog/<categories_name>/<items_name>')
+@app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(category_name, items_name):
     categories = session.query(Categories)
     category = session.query(Categories).filter_by(name= category_name).one()
