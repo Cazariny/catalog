@@ -217,10 +217,8 @@ def newItem():
     if request.method == 'POST':
         newItem = Items(name=request.form['name'],
                         description=request.form['description'],
-                        if request.form['category'] == 'Soccer':
-                            categories_id = 1
-                        elif request.form['category == '])
-
+                        categories_id=['category'],
+                        user_id= login_session['user_id'])
         session.add(newItem)
         session.commit()
         flash('New Menu %s Item Successfully Created' % newItem.name)

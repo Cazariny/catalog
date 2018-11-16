@@ -32,11 +32,11 @@
             <dt>Description:</dt>
             <dd><input type="text" size="30" name="description"></dd>
             <dt>Category:</dt>
-            <dd><input list="Categories" name="category"> </dd>
+            <dd><input list="Categories"> </dd>
             <datalist id="Categories">
                 <h2> Categories</h2>
                 {% for i in categories %}
-                <option value={{i.name}}>
+                <option value={{i.id}} name="category"> {{i.name}}
                 {% endfor %}
             </datalist>
         </dl>
