@@ -30,22 +30,26 @@
 <div class = 'pane'>
     <form action="{{ url_for('newItem', categories= category)}}" method = 'post'>
 
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type ="text" maxlength="50" class="form-control" name="name" placeholder="Name of the Item">
+     <dl>
+        <dt>Name:</dt>
+        <dd><input type ='text' size='30' name='name' placeholder = '{{item.name }}'></dd>
+        <dt>Description:</dt>
+        <dd><textarea name = 'description' rows='5' cols='40' placeholder = '{{item.description }}'></textarea></dd>
+        <dt>Category:</dt>
+        <dd><<input list="Categories" name="Categories" placeholder="{{item.categories}}"> </dd>
+        <datalist id="Categories">
+            <option value="Soccer">
+            <option value="Basketball">
+            <option value="Baseball">
+            <option value="Frisbee">
+            <option value="Snowboarding">
+            <option value="Rock Climbing">
+            <option value="Foosball">
+            <option value="Skating">
+            <option value="Hockey">
+        </datalist>
+    </dl>
 
-            <label for="description">Description:</label>
-            <textarea class="form-control" maxlength="250" rows="3" name="description" placeholder="Description of the Item"></textarea>
-
-            <label for="categories">Category:</label>
-            {% for i in categories %}
-            <div class="radio">
-                <label>
-                    <input type="radio" name="category" value="{{i.id}}">{{i.name}}
-                </label>
-            </div>
-            {% endfor %}
-        </div>
 
 
         <input type='submit' value='Create'>

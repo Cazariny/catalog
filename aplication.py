@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import SingletonThreadPool
 from models import Base, Categories, Items, User
 from flask import session as login_session
 import random, string
@@ -19,7 +20,8 @@ APPLICATION_NAME = "CatalogLand"
 
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///catalog.db')
+engine = create_engine('sqlite:///catalog.db',
+                       poolclass=SingletonThreadPool)
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -200,6 +202,8 @@ def catalogJSON():
 @app.route('/')
 @app.route('/home')
 def principal():
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
     categories = session.query(Categories)
     items = session.query(Items).order_by(asc(Items.name))
     if 'username' not in login_session:
@@ -211,13 +215,15 @@ def principal():
 # Create a new menu item
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def newItem():
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
     if 'username' not in login_session:
         return redirect('/login')
     category = session.query(Categories)
     if request.method == 'POST':
         newItem = Items(name=request.form['name'],
                         description=request.form['description'],
-                        categories_id=['category'],
+                        categories_id=['categories'],
                         user_id= login_session['user_id'])
         session.add(newItem)
         session.commit()
@@ -228,6 +234,8 @@ def newItem():
 
 @app.route("/catalog/<string:category_name>/items")
 def items(category_name):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
     categories = session.query(Categories)
     category= session.query(Categories).filter_by(name=category_name)
     items= session.query(Items).filter_by(categories_id = Categories.id)
@@ -236,6 +244,8 @@ def items(category_name):
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(category_name, items_name):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
     categories = session.query(Categories)
     category = session.query(Categories).filter_by(name= category_name).one()
     item= session.query(Items).filter_by(name= items_name).one()
@@ -249,6 +259,8 @@ def itemInfo(category_name, items_name):
 
 @app.route('/catalog/<items_name>/edit', methods=['GET', 'POST'])
 def editItem(item_name):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(Items).filter_by(name=item_name).one()
@@ -265,6 +277,8 @@ def editItem(item_name):
 # Delete a menu item
 @app.route('/catalog/<items_name>/delete', methods=['GET', 'POST'])
 def deleteItem(item_name):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
     if 'username' not in login_session:
         return redirect('/login')
     itemToDelete= session.query(Items).filter_by(name=item_name).one()
@@ -278,6 +292,7 @@ def deleteItem(item_name):
 
 
 if __name__ == '__main__':
+    connect_args = {'check_same_thread': False}
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
