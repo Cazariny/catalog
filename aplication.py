@@ -223,7 +223,7 @@ def newItem():
     if request.method == 'POST':
         newItem = Items(name=request.form['name'],
                         description=request.form['description'],
-                        categories_id=['categories'],
+                        categories_id=request.form['Categories'],
                         user_id= login_session['user_id'])
         session.add(newItem)
         session.commit()
@@ -239,7 +239,7 @@ def items(category_name):
     categories = session.query(Categories)
     category= session.query(Categories).filter_by(name=category_name)
     items= session.query(Items).filter_by(categories_id = Categories.id)
-    return render_template('items.html', categories=categories, items=items, categories_name = Categories.name)
+    return render_template('items.html', categories=categories, items=items, category_name = Categories.name)
 
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
@@ -250,9 +250,9 @@ def itemInfo(category_name, items_name):
     category = session.query(Categories).filter_by(name= category_name).one()
     item= session.query(Items).filter_by(name= items_name).one()
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item=item, categories=categories, categories_name= Categories.name, items_name= Items.name)
+        return render_template('itemInfo.html', item=item, categories=categories, category_name= category.name, items_name= Items.name)
     else:
-        return render_template('itemChanges.html',item=item, categories=categories, categories_name= Categories.name, items_name= Items.name)
+        return render_template('itemChanges.html',item=item, categories=categories, category_name= category_name, items_name= Items.name)
 
 
 
@@ -292,7 +292,6 @@ def deleteItem(item_name):
 
 
 if __name__ == '__main__':
-    connect_args = {'check_same_thread': False}
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, threaded = True)
