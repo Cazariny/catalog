@@ -246,13 +246,13 @@ def items(category_name):
 def itemInfo(category_name, items_name):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
-    categories = session.query(Categories)
-    category = session.query(Categories).filter_by(name= category_name).one()
-    item= session.query(Items).filter_by(name= items_name).one()
+    category_id = 0
+    item = session.query(Items).filter_by(categories_id = category_id, name = items_name )
+    category = session.query(Categories).filter_by(id = category_id, name = category_name)
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item=item, categories=categories, category_name= category.name, items_name= Items.name)
+        return render_template('itemInfo.html', item=item, categories=category, category_name= category.name, items_name= item.name, category_id= category.id)
     else:
-        return render_template('itemChanges.html',item=item, categories=categories, category_name= category_name, items_name= Items.name)
+        return render_template('itemChanges.html',item=item, categories=category, category_name= category_name, items_name= item.name, category_id= category.id)
 
 
 
