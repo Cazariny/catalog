@@ -202,8 +202,6 @@ def catalogJSON():
 @app.route('/')
 @app.route('/home')
 def principal():
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
     categories = session.query(Categories)
     items = session.query(Items).order_by(asc(Items.name))
     if 'username' not in login_session:
@@ -215,8 +213,6 @@ def principal():
 # Create a new menu item
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def newItem():
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
     if 'username' not in login_session:
         return redirect('/login')
     category = session.query(Categories)
@@ -234,8 +230,6 @@ def newItem():
 
 @app.route("/catalog/<string:category_name>/items")
 def items(category_name):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
     categories = session.query(Categories)
     category= session.query(Categories).filter_by(name=category_name)
     items= session.query(Items).filter_by(categories_id = Categories.id)
@@ -243,24 +237,20 @@ def items(category_name):
 
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
-def itemInfo(category_name, items_name):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
+def itemInfo(category_name, item_name):
     category_id = 0
-    item = session.query(Items).filter_by(categories_id = category_id, name = items_name )
+    item = session.query(Items).filter_by(categories_id = category_id, name = item_name )
     category = session.query(Categories).filter_by(id = category_id, name = category_name)
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item=item, categories=category, category_name= category.name, items_name= item.name, category_id= category.id)
+        return render_template('itemInfo.html', category_name= category_name, items_name= item_name, category_id= category.id)
     else:
-        return render_template('itemChanges.html',item=item, categories=category, category_name= category_name, items_name= item.name, category_id= category.id)
+        return render_template('itemChanges.html', category_name= category_name, items_name= item_name, category_id= category.id)
 
 
 
 
 @app.route('/catalog/<items_name>/edit', methods=['GET', 'POST'])
 def editItem(item_name):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(Items).filter_by(name=item_name).one()
@@ -277,8 +267,6 @@ def editItem(item_name):
 # Delete a menu item
 @app.route('/catalog/<items_name>/delete', methods=['GET', 'POST'])
 def deleteItem(item_name):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
     if 'username' not in login_session:
         return redirect('/login')
     itemToDelete= session.query(Items).filter_by(name=item_name).one()
@@ -294,4 +282,4 @@ def deleteItem(item_name):
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000, threaded = True)
+    app.run(host='0.0.0.0', port=5000, threaded = False)
