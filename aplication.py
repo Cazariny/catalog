@@ -238,9 +238,10 @@ def items(category_name):
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(categories_name, items_name):
-    category_id = int
-    category = session.query(Categories).filter_by(id=category_id, name=categories_name)
-    item = session.query(Items).filter_by(categories_id = category_id, name = items_name )
+    category = session.query(Categories)
+    item = session.query(Items).filter_by(name = items_name )
+    if items.categories_id == category.id:
+        categories_name = category.name;
     if 'username' not in login_session:
         return render_template('itemInfo.html', category_name= category.name, items_name= item.name, category_id= category.id)
     else:
@@ -250,10 +251,10 @@ def itemInfo(categories_name, items_name):
 
 
 @app.route('/catalog/<items_name>/edit', methods=['GET', 'POST'])
-def editItem(item_name):
+def editItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(Items).filter_by(name=item_name).one()
+    editedItem = session.query(Items).filter_by(name=items_name).one()
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']

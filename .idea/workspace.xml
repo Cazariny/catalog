@@ -7,8 +7,6 @@
     <list default="true" id="20966d74-2940-47f9-8dfa-6015c40aed36" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplication.py" beforeDir="false" afterPath="$PROJECT_DIR$/aplication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/menu.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/publicmenu.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/publicmenu.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -38,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/aplication.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="648">
-              <caret line="258" column="50" lean-forward="true" selection-start-line="258" selection-start-column="50" selection-end-line="258" selection-end-column="50" />
+            <state relative-caret-position="325">
+              <caret line="245" column="71" selection-start-line="245" selection-start-column="71" selection-end-line="245" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -92,7 +90,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-7" />
     <option name="width" value="908" />
     <option name="height" value="1047" />
@@ -186,7 +184,7 @@
       <workItem from="1542681033495" duration="1669000" />
       <workItem from="1542765424100" duration="3799000" />
       <workItem from="1542851936494" duration="1562000" />
-      <workItem from="1542937237496" duration="3287000" />
+      <workItem from="1542937237496" duration="4877000" />
     </task>
     <task id="LOCAL-00001" summary="Creation of 2 templates">
       <created>1540347697078</created>
@@ -426,11 +424,18 @@
       <option name="project" value="LOCAL" />
       <updated>1542860007518</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Login template changes">
+      <created>1542946440912</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1542946440912</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69023000" />
+    <option name="totallyTimeSpent" value="70567000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -669,8 +674,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/aplication.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="258" column="50" lean-forward="true" selection-start-line="258" selection-start-column="50" selection-end-line="258" selection-end-column="50" />
+        <state relative-caret-position="325">
+          <caret line="245" column="71" selection-start-line="245" selection-start-column="71" selection-end-line="245" selection-end-column="71" />
         </state>
       </provider>
     </entry>
