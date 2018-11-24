@@ -31,7 +31,7 @@
             <h2> Categories</h2>
             {% for i in categories %}
             <div class = 'Categories'>
-                <span class = 'name'><p><a href="{{url_for('items',categories=categories, items=items, category_name = i.name)}}">{{i.name}}</a></p></span>
+                <span class = 'name'><p><a href="{{url_for('items',categories = categories, items = items, category_name = i.name)}}">{{i.name}}</a></p></span>
             </div>
             {% endfor %}
         </div>
@@ -40,7 +40,7 @@
             <h2> Recent added Items</h2>
             {% for i in items %}
             <div class = 'nameAndPrice'>
-                <span class = 'name'><p><a href="{{url_for('itemInfo',categories_name= categories_name, items_name= i.name)}}">{{i.name}}</a></p></span>
+                <span class = 'name'><p><a href="{{url_for('itemInfo',items = i, categories_name = categories.name, items_name= i.name)}}">{{i.name}}</a></p></span>
             </div>
 
             {% endfor %}

@@ -28,10 +28,10 @@
 <div class="container">
     <div class="row">
         <div class="col col-lg-6" style="border: 1px solid  black ">
-            <p><a href = "{{url_for('editItem',item_name = item.name)}}">Edit Item</a> | <a href = "{{url_for('deleteItem',item_name = item.name)}}">Delete Item</a></p>
-            <h2>{{category.name}}</h2>
+            <h2>{{categories_name}}</h2>
             <div class = 'nameAndPrice'>
                 <p>{{item.description}}</p>
+                <p><a href = "{{url_for('editItem',items_name = item_name)}}">Edit Item</a> | <a href = "{{url_for('deleteItem',items_name = item_name)}}">Delete Item</a></p>
             </div>
         </div>
     </div>

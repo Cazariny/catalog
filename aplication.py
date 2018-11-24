@@ -238,16 +238,14 @@ def items(category_name):
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(categories_name, items_name):
-    category = session.query(Categories)
-    item = session.query(Items).filter_by(name = items_name )
-    if items.categories_id == category.id:
-        categories_name = category.name;
+    category = session.query(Categories).filter_by(name= categories_name, id = Categories.id)
+    item = session.query(Items).filter_by(name = items_name, categories_id = Categories.id )
+    if  Categories.id == Items.categories_id:
+        categories_name = category.name
     if 'username' not in login_session:
-        return render_template('itemInfo.html', category_name= category.name, items_name= item.name, category_id= category.id)
+        return render_template('itemInfo.html', categories_name = categories_name, items_name = items_name)
     else:
-        return render_template('itemChanges.html', category_name= category.name, items_name= item.name, category_id= category.id)
-
-
+        return render_template('itemChanges.html',item = Items,  categories_name = categories_name, items_name = items_name)
 
 
 @app.route('/catalog/<items_name>/edit', methods=['GET', 'POST'])
