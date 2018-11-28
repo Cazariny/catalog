@@ -240,7 +240,7 @@ def items(category_name):
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(categories_name, items_name):
     category = session.query(Categories).filter_by(name = categories_name)
-    item = session.query(Items).filter_by(name= items_name)
+    item = session.query(Items).filter_by(name= items_name, categories_id = Categories.id)
     if 'username' not in login_session:
         return render_template('itemInfo.html', categories = category, item = Items, categories_name = categories_name, items_name = items_name)
     else:
