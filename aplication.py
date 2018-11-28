@@ -11,6 +11,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
+import sqlite3
 
 app = Flask(__name__)
 
@@ -238,12 +239,10 @@ def items(category_name):
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(categories_name, items_name):
-    category = session.query(Categories)
-    item = session.query(Items)(name= categories_name)
-    if category.id == item.categories_id:
-        categories_name = category.name
+    category = session.query(Categories).filter_by(name = categories_name)
+    item = session.query(Items).filter_by(name= items_name)
     if 'username' not in login_session:
-        return render_template('itemInfo.html', item = item, category_name = categories_name, items_name = items_name)
+        return render_template('itemInfo.html', categories = category, item = Items, categories_name = categories_name, items_name = items_name)
     else:
         return render_template('itemChanges.html',item = item,  categories_name = categories_name, items_name = items_name)
 
