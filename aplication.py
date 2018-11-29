@@ -185,13 +185,13 @@ def gdisconnect():
 
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return response, redirect(url_for('principal'))
     else:
         # For whatever reason, the given token was invalid.
         response = make_response(
             json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return response , redirect(url_for('principal'))
 
 
 @app.route('/catalog.JSON')
@@ -211,7 +211,7 @@ def principal():
          return render_template('menu.html', items=items, categories=categories)
 
 
-# Create a new menu item
+# Create a new item
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def newItem():
     if 'username' not in login_session:
@@ -239,15 +239,15 @@ def items(category_name):
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(categories_name, items_name):
-    category = session.query(Categories).filter_by(name = categories_name)
-    item = session.query(Items).filter_by(name= items_name, categories_id = Categories.id)
+    category = session.query(Categories).filter_by(name = categories_name, id = Categories.id).one()
+    item = session.query(Items).filter_by(name= items_name, description = Items.description).one()
     if 'username' not in login_session:
-        return render_template('itemInfo.html', categories = category, item = Items, categories_name = categories_name, items_name = items_name)
+        return render_template('itemInfo.html', categories = category, item = item, categories_name = categories_name, items_name = items_name, item_description=Items.description)
     else:
-        return render_template('itemChanges.html',item = item,  categories_name = categories_name, items_name = items_name)
+        return render_template('itemChanges.html',categories = category, item = item, categories_name = categories_name, items_name = items_name, item_description=Items.description)
 
-
-@app.route('/catalog/<items_name>/edit', methods=['GET', 'POST'])
+#Edit an Item
+@app.route('/catalog/<string:items_name>/edit', methods=['GET', 'POST'])
 def editItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
@@ -257,17 +257,19 @@ def editItem(items_name):
             editedItem.name = request.form['name']
         if request.form['description']:
             editedItem.description = request.form['description']
+        if request.form['categories']:
+            editedItem.categories_id = request.form['categories']
         return redirect(url_for('itemInfo'))
     else:
         return render_template('editFile.html', item=editedItem)
 
 
-# Delete a menu item
-@app.route('/catalog/<items_name>/delete', methods=['GET', 'POST'])
-def deleteItem(item_name):
+# Delete an item
+@app.route('/catalog/<string:items_name>/delete', methods=['GET', 'POST'])
+def deleteItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete= session.query(Items).filter_by(name=item_name).one()
+    itemToDelete= session.query(Items).filter_by(name=items_name).one()
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
