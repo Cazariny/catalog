@@ -52,5 +52,28 @@ cat9 = Categories(name="Skating")
 session.add(cat9)
 session.commit()
 
+itm1 = Items(name="SoccerBall", description="Ball used for play Soccer", categories_id=1, user_id=1)
+session.add(itm1)
+session.commit()
+
+itm2 = Items(name="Dobok", description="Uniform of TaeKwonDo", categories_id=4, user_id=1)
+session.add(itm2)
+session.commit()
+
+itm3 = Items(name="Budosaga Shoes", description="Wu-shu tennis shoes of the Budosaga mark", categories_id=3, user_id=1)
+session.add(itm3)
+session.commit()
+
+itm4 = Items(name="Basket Ball", description="Basketball", categories_id=7, user_id=1)
+session.add(itm4)
+session.commit()
+
+itm5 = Items(name="Skateboard", description="Skateboard", categories_id=9, user_id=1)
+session.add(itm5)
+session.commit()
+
+itm6 = Items(name="Goggles", description="Goggles used for swimming", categories_id=6, user_id=1)
+session.add(itm6)
+session.commit()
 
 print "added categories"

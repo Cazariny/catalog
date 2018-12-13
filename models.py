@@ -44,7 +44,6 @@ class Categories(Base):
         return {
             'id': self.id,
             'name': self.name,
-            'item_id': self.item_id
         }
 
 

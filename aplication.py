@@ -229,12 +229,11 @@ def newItem():
     else:
         return render_template('newitem.html', categories=category)
 
-@app.route("/catalog/<string:category_name>/items")
-def items(category_name):
+@app.route("/catalog/<string:categories_name>/items")
+def items(categories_name):
     categories = session.query(Categories)
-    category= session.query(Categories).filter_by(name=category_name)
     items= session.query(Items).filter_by(categories_id = Categories.id)
-    return render_template('items.html', categories=categories, items=items, category_name = Categories.name)
+    return render_template('items.html', categories=categories, items=items, category_name = categories_name)
 
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
@@ -252,6 +251,12 @@ def editItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(Items).filter_by(name=items_name).one()
+    if login_session['user_id'] != editedItem.user_id:
+        return "<script>" \
+               "function myFunction() {" \
+               "alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}" \
+               "</script>" \
+               "<body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -270,6 +275,12 @@ def deleteItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
     itemToDelete= session.query(Items).filter_by(name=items_name).one()
+    if login_session['user_id'] != itemToDelete.user_id:
+        return "<script>" \
+               "function myFunction() {" \
+               "alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}" \
+               "</script>" \
+               "<body onload='myFunction()''>"
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
