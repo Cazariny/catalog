@@ -137,7 +137,7 @@ def gconnect():
     return output
 
 # User Helper Functions
-
+s
 
 def createUser(login_session):
     newUser = User(username=login_session['username'], email=login_session[
@@ -185,13 +185,13 @@ def gdisconnect():
 
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response, redirect(url_for('principal'))
+        redirect(url_for('principal'))
     else:
         # For whatever reason, the given token was invalid.
         response = make_response(
             json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return response , redirect(url_for('principal'))
+        redirect(url_for('principal'))
 
 
 @app.route('/catalog.JSON')
@@ -233,7 +233,10 @@ def newItem():
 def items(categories_name):
     categories = session.query(Categories)
     items= session.query(Items).filter_by(categories_id = Categories.id)
-    return render_template('items.html', categories=categories, items=items, category_name = categories_name)
+    return render_template('items.html',
+                           categories=categories,
+                           items=items,
+                           category_name = categories_name)
 
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
@@ -241,9 +244,19 @@ def itemInfo(categories_name, items_name):
     category = session.query(Categories).filter_by(name = categories_name, id = Categories.id).one()
     item = session.query(Items).filter_by(name= items_name, description = Items.description).one()
     if 'username' not in login_session:
-        return render_template('itemInfo.html', categories = category, item = item, categories_name = categories_name, items_name = items_name, item_description=Items.description)
+        return render_template('itemInfo.html',
+                               # categories = category,
+                               # item = item,
+                               categories_name = categories_name,
+                               items_name = items_name,
+                               item_description=Items.description)
     else:
-        return render_template('itemChanges.html',categories = category, item = item, categories_name = categories_name, items_name = items_name, item_description=Items.description)
+        return render_template('itemChanges.html',
+                               # categories = category,
+                               # item = item,
+                               categories_name = categories_name,
+                               items_name = items_name,
+                               item_description=Items.description)
 
 #Edit an Item
 @app.route('/catalog/<string:items_name>/edit', methods=['GET', 'POST'])
