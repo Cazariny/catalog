@@ -10,7 +10,11 @@ secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x
 
 
 class User(Base):
+    """
+    Registered user information is stored in db
+    """
     __tablename__ = 'user'
+
     id = Column(Integer, primary_key=True)
     username = Column(String(50), index=True)
     picture = Column(String)
@@ -18,6 +22,9 @@ class User(Base):
 
     @staticmethod
     def verify_auth_token(token):
+        """
+         Gets a token for the user login
+        """
         s = Serializer(secret_key)
         try:
             data = s.loads(token)
@@ -32,7 +39,11 @@ class User(Base):
 
 
 class Categories(Base):
+    """
+    Registered categories information is stored in db
+    """
     __tablename__ = 'categories'
+
     id = Column(Integer, primary_key=True)
     name = Column(String(40), index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
@@ -48,6 +59,9 @@ class Categories(Base):
 
 
 class Items(Base):
+    """
+    Registered items information is stored in db
+    """
     __tablename__ = 'items'
 
     name = Column(String(80), nullable=False)

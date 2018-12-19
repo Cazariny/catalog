@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template, request, redirect,\
+    jsonify, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
 from models import Base, Categories, Items, User
 from flask import session as login_session
-import random, string
+import random
+import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -99,7 +101,7 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
+        response=make_response(json.dumps('User is already connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -131,13 +133,17 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; ' \
+              'height: 300px;' \
+              'border-radius: 150px;' \
+              '-webkit-border-radius: 150px;' \
+              '-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
 
 # User Helper Functions
-s
+
 
 def createUser(login_session):
     newUser = User(username=login_session['username'], email=login_session[
@@ -157,7 +163,7 @@ def getUserID(email):
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
-    except:
+    except Exception:
         return None
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
@@ -206,9 +212,13 @@ def principal():
     categories = session.query(Categories)
     items = session.query(Items).order_by(asc(Items.name))
     if 'username' not in login_session:
-        return render_template('publicmenu.html', items=items, categories=categories)
+        return render_template('publicmenu.html',
+                               items=items,
+                               categories=categories)
     else:
-         return render_template('menu.html', items=items, categories=categories)
+        return render_template('menu.html',
+                                items=items,
+                                categories=categories)
 
 
 # Create a new item
@@ -221,7 +231,7 @@ def newItem():
         newItem = Items(name=request.form['name'],
                         description=request.form['description'],
                         categories_id=request.form['Categories'],
-                        user_id= login_session['user_id'])
+                        user_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         flash('New Menu %s Item Successfully Created' % newItem.name)
@@ -229,20 +239,22 @@ def newItem():
     else:
         return render_template('newitem.html', categories=category)
 
+
 @app.route("/catalog/<string:categories_name>/items")
 def items(categories_name):
     categories = session.query(Categories)
-    items= session.query(Items).filter_by(categories_id = Categories.id)
+    items = session.query(Items).filter_by(categories_id = Categories.id)
     return render_template('items.html',
                            categories=categories,
                            items=items,
-                           category_name = categories_name)
+                           category_name=categories_name)
 
 
 @app.route('/catalog/<string:categories_name>/<string:items_name>')
 def itemInfo(categories_name, items_name):
-    category = session.query(Categories).filter_by(name = categories_name, id = Categories.id).one()
-    item = session.query(Items).filter_by(name= items_name, description = Items.description).one()
+    category = session.query(Categories).filter_by(name=categories_name,
+                                                   id=Categories.id).one_or_none()
+    item = session.query(Items).filter_by(name=items_name, description=Items.description).one()
     if 'username' not in login_session:
         return render_template('itemInfo.html',
                                # categories = category,
@@ -297,8 +309,8 @@ def deleteItem(items_name):
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
-        return redirect(url_for('principal'))
         flash('Item Successfully Deleted')
+        return redirect(url_for('principal'))
     else:
         return render_template('deleteFile.html', item=itemToDelete)
 
@@ -306,4 +318,4 @@ def deleteItem(items_name):
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000, threaded = False)
+    app.run(host='0.0.0.0', port=5000, threaded=False)
