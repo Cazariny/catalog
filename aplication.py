@@ -150,18 +150,18 @@ def createUser(login_session):
                    'email'], picture=login_session['picture'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
     return user.id
 
 
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
+    user = session.query(User).filter_by(id=user_id).one_or_none()
     return user
 
 
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = session.query(User).filter_by(email=email).one_or_none()
         return user.id
     except Exception:
         return None
@@ -255,7 +255,7 @@ def itemInfo(category_name, items_name):
     category = session.query(Categories)\
         .filter_by(name=category_name, id=Categories.id).one_or_none()
     item = session.query(Items).filter_by(name=items_name,
-                                          description=Items.description).one()
+                                          description=Items.description).one_or_none()
     if 'username' not in login_session:
         return render_template('itemInfo.html',
                                # categories = category,
@@ -277,7 +277,7 @@ def itemInfo(category_name, items_name):
 def editItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(Items).filter_by(name=items_name).one()
+    editedItem = session.query(Items).filter_by(name=items_name).one_or_none()
     if login_session['user_id'] != editedItem.user_id:
         return "<script>" \
                "function myFunction() {" \
@@ -301,7 +301,7 @@ def editItem(items_name):
 def deleteItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete = session.query(Items).filter_by(name=items_name).one()
+    itemToDelete = session.query(Items).filter_by(name=items_name).one_or_none()
     if login_session['user_id'] != itemToDelete.user_id:
         return "<script>" \
                "function myFunction() {" \

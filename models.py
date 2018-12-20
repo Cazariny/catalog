@@ -2,11 +2,14 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
-import random, string
-from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
+import random
+import string
+from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
+                          BadSignature, SignatureExpired)
 
 Base = declarative_base()
-secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                     for x in xrange(32))
 
 
 class User(Base):
@@ -47,7 +50,7 @@ class Categories(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(40), index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User)
+    user = relationship(User, cascade="delete")
 
     @property
     def serialize(self):
@@ -68,9 +71,9 @@ class Items(Base):
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
     categories_id = Column(Integer, ForeignKey('categories.id'))
-    categories = relationship(Categories)
+    categories = relationship(Categories, cascade="delete")
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User)
+    user = relationship(User, cascade="delete")
 
     @property
     def serialize(self):
@@ -80,7 +83,6 @@ class Items(Base):
             'description': self.description,
             'id': self.id,
         }
-
 
 
 engine = create_engine('sqlite:///catalog.db')
