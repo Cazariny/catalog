@@ -101,7 +101,7 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response=make_response(json.dumps('User is already connected.'),
+        response = make_response(json.dumps('User is already connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -217,8 +217,8 @@ def principal():
                                categories=categories)
     else:
         return render_template('menu.html',
-                                items=items,
-                                categories=categories)
+                               items=items,
+                               categories=categories)
 
 
 # Create a new item
@@ -243,34 +243,36 @@ def newItem():
 @app.route("/catalog/<string:categories_name>/items")
 def items(categories_name):
     categories = session.query(Categories)
-    items = session.query(Items).filter_by(categories_id = Categories.id)
+    items = session.query(Items).filter_by(categories_id=Categories.id)
     return render_template('items.html',
                            categories=categories,
                            items=items,
                            category_name=categories_name)
 
 
-@app.route('/catalog/<string:categories_name>/<string:items_name>')
-def itemInfo(categories_name, items_name):
-    category = session.query(Categories).filter_by(name=categories_name,
-                                                   id=Categories.id).one_or_none()
-    item = session.query(Items).filter_by(name=items_name, description=Items.description).one()
+@app.route('/catalog/<string:category_name>/<string:items_name>')
+def itemInfo(category_name, items_name):
+    category = session.query(Categories)\
+        .filter_by(name=category_name, id=Categories.id).one_or_none()
+    item = session.query(Items).filter_by(name=items_name,
+                                          description=Items.description).one()
     if 'username' not in login_session:
         return render_template('itemInfo.html',
                                # categories = category,
                                # item = item,
-                               categories_name = categories_name,
-                               items_name = items_name,
+                               categories_name=category_name,
+                               items_name=items_name,
                                item_description=Items.description)
     else:
         return render_template('itemChanges.html',
                                # categories = category,
                                # item = item,
-                               categories_name = categories_name,
-                               items_name = items_name,
+                               categories_name=category_name,
+                               items_name=items_name,
                                item_description=Items.description)
 
-#Edit an Item
+
+# Edit an Item
 @app.route('/catalog/<string:items_name>/edit', methods=['GET', 'POST'])
 def editItem(items_name):
     if 'username' not in login_session:
@@ -279,7 +281,7 @@ def editItem(items_name):
     if login_session['user_id'] != editedItem.user_id:
         return "<script>" \
                "function myFunction() {" \
-               "alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}" \
+               "alert('Please create your own item...');}" \
                "</script>" \
                "<body onload='myFunction()''>"
     if request.method == 'POST':
@@ -299,11 +301,11 @@ def editItem(items_name):
 def deleteItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete= session.query(Items).filter_by(name=items_name).one()
+    itemToDelete = session.query(Items).filter_by(name=items_name).one()
     if login_session['user_id'] != itemToDelete.user_id:
         return "<script>" \
                "function myFunction() {" \
-               "alert('You are not authorized to edit menu items to this restaurant. Please create your own restaurant in order to edit items.');}" \
+               "alert('Please create your own item...');}" \
                "</script>" \
                "<body onload='myFunction()''>"
     if request.method == 'POST':
