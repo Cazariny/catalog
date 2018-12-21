@@ -242,10 +242,10 @@ def newItem():
 
 @app.route("/catalog/<string:categories_name>/items")
 def items(categories_name):
-    categories = session.query(Categories)
-    items = session.query(Items).filter_by(categories_id=Categories.id)
+    category = session.query(Categories).filter_by(name=categories_name)
+    items = session.query(Items).filter_by(categories_id=category.id)
     return render_template('items.html',
-                           categories=categories,
+                           categories=category,
                            items=items,
                            category_name=categories_name)
 
@@ -258,15 +258,11 @@ def itemInfo(category_name, items_name):
                                           description=Items.description).one_or_none()
     if 'username' not in login_session:
         return render_template('itemInfo.html',
-                               # categories = category,
-                               # item = item,
                                categories_name=category_name,
                                items_name=items_name,
                                item_description=Items.description)
     else:
         return render_template('itemChanges.html',
-                               # categories = category,
-                               # item = item,
                                categories_name=category_name,
                                items_name=items_name,
                                item_description=Items.description)
