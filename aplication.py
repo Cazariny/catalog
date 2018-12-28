@@ -242,8 +242,8 @@ def newItem():
 
 @app.route("/catalog/<string:categories_name>/items")
 def items(categories_name):
-    category = session.query(Categories).filter_by(name=categories_name)
-    items = session.query(Items).filter_by(categories_id=category.id)
+    category = session.query(Categories).filter_by(name=categories_name).one_or_none()
+    items = session.query(Items).filter_by(categories_id=category.id).all()
     return render_template('items.html',
                            categories=category,
                            items=items,
