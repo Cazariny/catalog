@@ -200,10 +200,14 @@ def gdisconnect():
         redirect(url_for('principal'))
 
 
-@app.route('/catalog.JSON')
+@app.route('/catalog/JSON')
 def catalogJSON():
-    catalog = session.query(Categories).all()
-    return jsonify(catalog=[c.serialize for c in catalog])
+    categories = session.query(Categories).all()
+    for category in categories:
+        items = session.query(Items).filter_by(categories_id=category.id).all()
+        json_string = json.dumps([Items.serialize for i in items])
+    return jsonify(category.id,category.name,json_string)
+
 
 
 @app.route('/')
