@@ -93,7 +93,8 @@ def gconnect():
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
-            json.dumps("Token's client ID does not match app's."), 401)
+            json.dumps(
+                "Token's client ID does not match app's."), 401)
         print "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -246,7 +247,8 @@ def newItem():
 
 @app.route("/catalog/<string:category_name>/items")
 def items(category_name):
-    category = session.query(Categories).filter_by(name=category_name).one_or_none()
+    category = session.query(Categories)\
+        .filter_by(name=category_name).one_or_none()
     items = session.query(Items).filter_by(categories_id=category.id)
     return render_template('items.html',
                            categories=category,

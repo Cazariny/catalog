@@ -43,11 +43,10 @@ category_json = json.loads("""{
 for e in category_json['all_categories']:
     category_input = Categories(
         name=str(e['name']),
-        id=str(e['id']),
         user_id= 1
   )
-session.add(category_input)
-session.commit()
+    session.add(category_input)
+    session.commit()
 # cat1 = Categories(name="Soccer")
 #
 # session.add(cat1)
