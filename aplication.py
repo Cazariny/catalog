@@ -206,8 +206,21 @@ def catalogJSON():
     categories = session.query(Categories).all()
     for category in categories:
         items = session.query(Items).filter_by(categories_id=category.id).all()
-        json_string = json.dumps([Items.serialize for i in items])
+        json_string = json.dumps([items.serialize for i in items])
     return jsonify(category.id,category.name,json_string)
+
+
+@app.route('/catalog/<string:category_name>/JSON')
+def catJSON(category_name):
+    category= session.query(Categories).filter_by(name=category_name).one_or_none()
+    items = session.query(Items).filter_by(categories_id=category.id)
+
+    return jsonify(Items=[i.serialize for i in items])
+
+
+@app.route('catalog/<string:category_name>/item_name/JSON')
+def menuItemJSON(category_id, item_name):
+
 
 
 
@@ -257,27 +270,28 @@ def items(category_name):
                            category_id=category.id)
 
 
-@app.route('/catalog/<string:category_name>/<string:items_name>')
-def itemInfo(category_name, items_name):
-    item = session.query(Items).filter_by(name=items_name,
-                                          description=Items.description,
-                                          categories_id=Categories.id).one_or_none()
-    category = session.query(Categories)\
-        .filter_by(name=category_name, id=item.categories_id).one_or_none()
-
-
+@app.route('/catalog/<string:category_name>/<string:item_name>')
+def itemInfo(category_name, item_name):
+    category=session.query(Categories).filter_by\
+            (name=category_name).one_or_none()
+    item=session.query(Items).filter_by(name=item_name,
+                                        categories_id=Categories.id
+                                        ).one_or_none()
+    if Categories.id == item.categories_id:
+        category_name= category.name
     if 'username' not in login_session:
         return render_template('itemInfo.html',
-                               categories_name=category_name,
-                               items_name=items_name,
-                               item_description=Items.description,
-                               category_id=item.categories_id)
+                               item=item,
+                               category_name=category_name,
+                               item_name=item_name,
+                               item_description=item.description)
     else:
         return render_template('itemChanges.html',
-                               categories_name=category_name,
-                               items_name=items_name,
-                               item_description=Items.description,
-                               category_id=item.categories_id)
+                               item=item,
+                               category_name=category_name,
+                               item_name=item_name,
+                               item_description=item.description)
+
 
 
 # Edit an Item
