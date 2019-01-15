@@ -151,7 +151,8 @@ def createUser(login_session):
                    'email'], picture=login_session['picture'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one_or_none()
+    user = session.query(User).\
+        filter_by(email=login_session['email']).one_or_none()
     return user.id
 
 
@@ -207,27 +208,29 @@ def catalogJSON():
     for category in categories:
         items = session.query(Items).filter_by(categories_id=category.id).all()
         json_string = json.dumps([items.serialize for i in items])
-    return jsonify(category.id,category.name,json_string)
+    return jsonify(category.id, category.name, json_string)
 
 
 @app.route('/catalog/<string:category_name>/JSON')
 def catJSON(category_name):
-    category= session.query(Categories).filter_by(name=category_name).one_or_none()
+    category = session.query(Categories)\
+        .filter_by(name=category_name).one_or_none()
     items = session.query(Items).filter_by(categories_id=category.id)
-
     return jsonify(Items=[i.serialize for i in items])
 
 
-@app.route('catalog/<string:category_name>/item_name/JSON')
+@app.route('/catalog/<int:category_id>/item/<string:item_name>/JSON')
 def menuItemJSON(category_id, item_name):
-
-
+    category = session.query(Categories)\
+        .filter_by(id=category_id).one_or_none()
+    items = session.query(Items).filter_by(categories_id=category_id).all()
+    return jsonify(Items=items.serialize, categories_id=category_id)
 
 
 @app.route('/')
 @app.route('/home')
 def principal():
-    categories = session.query(Categories)
+    categories = session.query(Categories).all()
     items = session.query(Items).order_by(asc(Items.name))
     if 'username' not in login_session:
         return render_template('publicmenu.html',
@@ -270,28 +273,27 @@ def items(category_name):
                            category_id=category.id)
 
 
-@app.route('/catalog/<string:category_name>/<string:item_name>')
-def itemInfo(category_name, item_name):
-    category=session.query(Categories).filter_by\
-            (name=category_name).one_or_none()
-    item=session.query(Items).filter_by(name=item_name,
-                                        categories_id=Categories.id
-                                        ).one_or_none()
-    if Categories.id == item.categories_id:
-        category_name= category.name
+@app.route('/catalog/<int:cat_id>/<string:item_name>')
+def itemInfo(cat_id, item_name):
+    category = session.query(Categories)\
+        .filter_by(id=cat_id).one_or_none()
+    item = session.query(Items)\
+        .filter_by(name=item_name,
+                   categories_id=cat_id).one_or_none()
     if 'username' not in login_session:
         return render_template('itemInfo.html',
+                               categories= category,
                                item=item,
-                               category_name=category_name,
+                               category_name=category.name,
+                               category_id=cat_id,
                                item_name=item_name,
                                item_description=item.description)
     else:
         return render_template('itemChanges.html',
                                item=item,
-                               category_name=category_name,
+                               category_name=category.name,
                                item_name=item_name,
                                item_description=item.description)
-
 
 
 # Edit an Item
@@ -299,7 +301,8 @@ def itemInfo(category_name, item_name):
 def editItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(Items).filter_by(name=items_name).one_or_none()
+    editedItem = session.query(Items)\
+        .filter_by(name=items_name).one_or_none()
     if login_session['user_id'] != editedItem.user_id:
         return "<script>" \
                "function myFunction() {" \
@@ -323,7 +326,8 @@ def editItem(items_name):
 def deleteItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete = session.query(Items).filter_by(name=items_name).one_or_none()
+    itemToDelete = session.query(Items)\
+        .filter_by(name=items_name).one_or_none()
     if login_session['user_id'] != itemToDelete.user_id:
         return "<script>" \
                "function myFunction() {" \
