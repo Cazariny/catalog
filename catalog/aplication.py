@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect,\
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
-from models import Base, Categories, Items, User
+from catalog.models import Base, Categories, Items, User
 from flask import session as login_session
 import random
 import string
@@ -13,7 +13,6 @@ import httplib2
 import json
 from flask import make_response
 import requests
-import sqlite3
 
 app = Flask(__name__)
 
@@ -29,15 +28,6 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
-
-# Create anti-forgery state token
-# @app.route('/logini')
-# def chowLogin():
-#     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-#                     for x in xrange(32))
-#     login_session['state'] = state
-#     return "The current session state is %s" % login_session['state']
 
 @app.route('/login')
 def showLogin():
@@ -95,7 +85,7 @@ def gconnect():
         response = make_response(
             json.dumps(
                 "Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
+
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -140,7 +130,6 @@ def gconnect():
               '-webkit-border-radius: 150px;' \
               '-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
     return output
 
 # User Helper Functions
