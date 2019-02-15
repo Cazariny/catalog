@@ -1,27 +1,24 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy import create_engine
+from catalog import db
 import random
 import string
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
                           BadSignature, SignatureExpired)
 
-Base = declarative_base()
+
 secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits)
                      for x in xrange(32))
 
 
-class User(Base):
+class User(db.Base):
     """
     Registered user information is stored in db
     """
     __tablename__ = 'user'
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String(50), index=True)
-    picture = Column(String)
-    email = Column(String)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), index=True)
+    picture = db.Column(db.String)
+    email = db.Column(db.String)
 
     @staticmethod
     def verify_auth_token(token):
@@ -41,45 +38,29 @@ class User(Base):
         return user_id
 
 
-class Categories(Base):
+class Categories(db.Base):
     """
     Registered categories information is stored in db
     """
     __tablename__ = 'categories'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(40), index=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User, cascade="delete")
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship(User, cascade="delete")
 
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'id': self.id,
-            'name': self.name,
-        }
-
-
-class Items(Base):
+class Items(db.Base):
     """
     Registered items information is stored in db
     """
     __tablename__ = 'items'
 
-    name = Column(String(80), nullable=False)
-    id = Column(Integer, primary_key=True)
-    description = Column(String(250))
-    categories_id = Column(Integer, ForeignKey('categories.id'))
-    categories = relationship(Categories, cascade="delete")
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User, cascade="delete")
+    name = db.Column(db.String(80), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(250))
+    categories_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    categories = db.relationship(Categories, cascade="delete")
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship(User, cascade="delete")
 
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'name': self.name,
-            'description': self.description,
-            'id': self.id,
-        }
+
