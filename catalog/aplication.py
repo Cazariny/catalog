@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect,\
     jsonify, url_for, flash
-from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
-from catalog.models import Base, Categories, Items, User
+from catalog import db
+from catalog.models import User, Categories, Items
 from flask import session as login_session
 import random
 import string
@@ -20,11 +20,6 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "CatalogLand"
 
-
-# Connect to Database and create database session
-engine = create_engine('sqlite:///catalog.db',
-                       poolclass=SingletonThreadPool)
-Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
