@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import SingletonThreadPool
 from catalog import db
 from catalog.models import User, Categories, Items
-from flask import session as login_session
+from catalog.helpers import categories_to_json, get_category_list, get_google_authfrom flask import session as login_session
 import random
 import string
 from oauth2client.client import flow_from_clientsecrets
@@ -20,9 +20,6 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "CatalogLand"
 
-
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
 
 @app.route('/login')
 def showLogin():
