@@ -44,7 +44,7 @@ def callback():
     """
     # redirect to home page if user is logged in
     if current_user is not None and current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('principal'))
     # check for errors
     if 'error' in request.args:
         # user denied access to their account
@@ -86,7 +86,7 @@ def callback():
         db.session.commit()
         # login user now using flask_login
         login_user(user)
-        return redirect(url_for('index'))
+        return redirect(url_for('principal'))
     return 'Error when fetching user information from Google'
 
 
@@ -98,7 +98,7 @@ def logout():
     uses flask_login method
     """
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('principal'))
 
 
 # @app.route('/login')
@@ -332,27 +332,29 @@ def items(category_name):
 
 @app.route('/catalog/<int:cat_id>/<string:item_name>')
 def itemInfo(cat_id, item_name):
-    item = Items.query.join(Categories).filter(Categories.id = cat_id, Items.name == item_name)
-    if 'username' not in login_session:
-        return render_template('itemInfo.html',
-                               categories= category,
+    item = Items.query.join(Categories).filter(Categories.id = cat_id, Items.name == item_name).first()
+    if current_user is not None and current_user.is_authenticated:
+        return render_template('itemChanges.html',
                                item=item,
-                               category_name=category.name,
-                               category_id=cat_id,
+                               category_name=Categories.name,
                                item_name=item_name,
                                item_description=item.description)
     else:
-        return render_template('itemChanges.html',
+        return render_template('itemInfo.html',
+                               categories=Categories,
                                item=item,
-                               category_name=category.name,
+                               category_name=Categories.name,
+                               category_id=cat_id,
                                item_name=item_name,
                                item_description=item.description)
+
 
 
 # Edit an Item
 @app.route('/catalog/<string:items_name>/edit', methods=['GET', 'POST'])
+@login_required
 def editItem(items_name):
-    if 'username' not in login_session:
+    if 'username' not in current_user.name:
         return redirect('/login')
     editedItem = Items.query.get(str(items_name))
     if current_user.id != editedItem.user_id:
@@ -376,7 +378,7 @@ def editItem(items_name):
 # Delete an item
 @app.route('/catalog/<string:items_name>/delete', methods=['GET', 'POST'])
 def deleteItem(items_name):
-    if 'username' not in login_session:
+    if 'username' not in current_user.name:
         return redirect('/login')
     itemToDelete = session.query(Items)\
         .filter_by(name=items_name).one_or_none()
