@@ -332,11 +332,7 @@ def items(category_name):
 
 @app.route('/catalog/<int:cat_id>/<string:item_name>')
 def itemInfo(cat_id, item_name):
-    category = session.query(Categories)\
-        .filter_by(id=cat_id).one_or_none()
-    item = session.query(Items)\
-        .filter_by(name=item_name,
-                   categories_id=cat_id).one_or_none()
+    item = Items.query.join(Categories).filter(Categories.id = cat_id, Items.name == item_name)
     if 'username' not in login_session:
         return render_template('itemInfo.html',
                                categories= category,
@@ -358,9 +354,8 @@ def itemInfo(cat_id, item_name):
 def editItem(items_name):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(Items)\
-        .filter_by(name=items_name).one_or_none()
-    if login_session['user_id'] != editedItem.user_id:
+    editedItem = Items.query.get(str(items_name))
+    if current_user.id != editedItem.user_id:
         return "<script>" \
                "function myFunction() {" \
                "alert('Please create your own item...');}" \
@@ -385,15 +380,15 @@ def deleteItem(items_name):
         return redirect('/login')
     itemToDelete = session.query(Items)\
         .filter_by(name=items_name).one_or_none()
-    if login_session['user_id'] != itemToDelete.user_id:
+    if current_user.id!= itemToDelete.user_id:
         return "<script>" \
                "function myFunction() {" \
                "alert('Please create your own item...');}" \
                "</script>" \
                "<body onload='myFunction()''>"
     if request.method == 'POST':
-        session.delete(itemToDelete)
-        session.commit()
+        db.session.delete(itemToDelete)
+        db.session.commit()
         flash('Item Successfully Deleted')
         return redirect(url_for('principal'))
     else:
