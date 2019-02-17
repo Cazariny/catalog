@@ -13,10 +13,10 @@ import json
 from requests.exceptions import HTTPError
 import requests
 
-app = Flask(__name__)
 
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+
+#CLIENT_ID = json.loads(
+#    open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "CatalogLand"
 
 @app.route('/login')
@@ -291,7 +291,7 @@ def logout():
 @app.route('/')
 @app.route('/home')
 def principal():
-    items = Items.query.order_by(desc(Items.id)).limit(10).all()
+    items = Items.query.order_by(desc(Items.id)).limit(10)
     if current_user is not None and current_user.is_authenticated:
         return render_template('menu.html',
                                items=items,
@@ -332,7 +332,8 @@ def items(category_name):
 
 @app.route('/catalog/<int:cat_id>/<string:item_name>')
 def itemInfo(cat_id, item_name):
-    item = Items.query.join(Categories).filter(Categories.id = cat_id, Items.name == item_name).first()
+    item = Items.query.join(Categories).\
+	filter(Categories.id == cat_id, Items.name == item_name).first()
     if current_user is not None and current_user.is_authenticated:
         return render_template('itemChanges.html',
                                item=item,
@@ -395,9 +396,3 @@ def deleteItem(items_name):
         return redirect(url_for('principal'))
     else:
         return render_template('deleteFile.html', item=itemToDelete)
-
-
-if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
-    app.debug = True
-    app.run(host='0.0.0.0', port=5000, threaded=False)
