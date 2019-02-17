@@ -19,6 +19,9 @@ class User(db.Base):
     username = db.Column(db.String(50), index=True)
     picture = db.Column(db.String)
     email = db.Column(db.String)
+    token = db.Column(db.text)
+    items = db.relationship('Items', backref="user", uselist=True)
+    categories = db.relationship('Categories', backref="user", uselist=True)
 
     @staticmethod
     def verify_auth_token(token):
@@ -47,7 +50,7 @@ class Categories(db.Base):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship(User, cascade="delete")
+    items = db.relationship('Items', backref="categories", uselist=True)
 
 class Items(db.Base):
     """
@@ -58,9 +61,7 @@ class Items(db.Base):
     name = db.Column(db.String(80), nullable=False)
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(250))
-    categories_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    categories = db.relationship(Categories, cascade="delete")
+    categories_id = db.Column(db.Integer, db.ForeignKey('categories.id', ondelete="Cascade"))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship(User, cascade="delete")
 
 
