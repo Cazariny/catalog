@@ -16,11 +16,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                {%if 'username' not in session %}
-                <a href="{{url_for('showLogin')}}">Click Here to Login </a>
-                {% else %}
-                <a href="{{url_for('gdisconnect')}}">Logout </a>
-                {% endif %}
+		<a href="{% if g.logged_in %}{{ url_for('logout') }}{% else %}{{ url_for('login') }}{% endif %}">
+                {% if g.logged_in %}Logout{% else %}Login{% endif %}</a>
         </ul>
     </div>
 </nav>

@@ -17,7 +17,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                     {%if 'username' not in session %}
-                <a href="{{url_for('showLogin')}}">Click Here to Login </a>
+                <a href="{{url_for('login')}}">Click Here to Login </a>
                 {% else %}
                 <a href="{{url_for('gdisconnect')}}">Logout </a>
                 {% endif %}
