@@ -7,7 +7,7 @@ class Auth:
     CLIENT_ID = '900234952643-va0na2ga3p7b0qivtjeaqkijcpnv9to5.apps.googleusercontent.com'
     CLIENT_SECRET = '9DILVZpTqT8mDIqYXX0ukkg1'
     # URI that google server will redirect to
-    REDIRECT_URI = 'http://localhost:5000/gconnect'
+    REDIRECT_URI = 'http://catalogos.me/gconnect'
     # Endpoint to start OAuth request from
     AUTH_URI = 'https://accounts.google.com/o/oauth2/auth'
     # Endpoint to fetch user token

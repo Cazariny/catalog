@@ -6,10 +6,6 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
                           BadSignature, SignatureExpired)
 
 
-secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                     for x in xrange(32))
-
-
 class User(db.Model, UserMixin):
     """
     Registered user information is stored in db
@@ -23,23 +19,6 @@ class User(db.Model, UserMixin):
     token = db.column(db.text)
     items = db.relationship('Items', backref="user", uselist=True)
     
-
-    @staticmethod
-    def verify_auth_token(token):
-        """
-         Gets a token for the user login
-        """
-        s = Serializer(secret_key)
-        try:
-            data = s.loads(token)
-        except SignatureExpired:
-            # Valid Token, but expired
-            return None
-        except BadSignature:
-            # Invalid Token
-            return None
-        user_id = data['id']
-        return user_id
 
 
 class Categories(db.Model):
